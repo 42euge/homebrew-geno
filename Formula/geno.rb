@@ -6,30 +6,31 @@ class Geno < Formula
   sha256 "0096bb404eb682f5b8a0e1496d11f7309c3623372684a3b5a4e7bf74923b4fa1"
   license "MIT"
 
+  depends_on "go" => :build
   depends_on "pipx"
   depends_on "python@3.12"
 
   def install
-    # Each tool installs into its own pipx venv; pipx manages the PATH links.
-    tools = %w[
-      geno-tools
-      geno-tt
-      geno-vault
-      geno-surf
-      geno-pear
-    ]
-    tools.each do |tool|
-      system "pipx", "install", "git+https://github.com/42euge/#{tool}.git",
-             "--force", "--python", Formula["python@3.12"].opt_bin/"python3.12"
+    # Build and install the `geno` unified entry point from geno-cli.
+    resource("geno-cli").stage do
+      system "go", "build", "-o", bin/"geno", "./cmd/geno"
     end
 
-    # iterm2 API package needed by geno-tt and geno-vault for iTerm2 orchestration.
-    # Use || true so a missing/already-present iterm2 doesn't abort the install.
+    # Install each Python tool into its own pipx venv.
+    py = Formula["python@3.12"].opt_bin/"python3.12"
+    %w[geno-tools geno-tt geno-vault geno-surf geno-pear].each do |tool|
+      system "pipx", "install", "git+https://github.com/42euge/#{tool}.git",
+             "--force", "--python", py
+    end
+
+    # iterm2 needed by geno-tt and geno-vault — non-fatal if already present.
     system "bash", "-c", "pipx inject geno-tt iterm2 || true"
     system "bash", "-c", "pipx inject geno-vault iterm2 || true"
+  end
 
-    # Homebrew requires at least one file in the prefix — write a marker.
-    (prefix/"INSTALLED").write "geno ecosystem #{version}\n"
+  resource "geno-cli" do
+    url "https://github.com/42euge/geno-cli/archive/refs/heads/main.tar.gz"
+    sha256 "d10c8032db380ac0d279267c5aba15bc50b3bfbef54cd25510e7575396648613"
   end
 
   def caveats
