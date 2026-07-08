@@ -23,21 +23,26 @@ class Geno < Formula
              "--force", "--python", Formula["python@3.12"].opt_bin/"python3.12"
     end
 
-    # iterm2 API package needed by geno-tt and geno-vault for iTerm2 orchestration
-    system "pipx", "inject", "geno-tt", "iterm2"
-    system "pipx", "inject", "geno-vault", "iterm2"
+    # iterm2 API package needed by geno-tt and geno-vault for iTerm2 orchestration.
+    # Use || true so a missing/already-present iterm2 doesn't abort the install.
+    system "bash", "-c", "pipx inject geno-tt iterm2 || true"
+    system "bash", "-c", "pipx inject geno-vault iterm2 || true"
+
+    # Homebrew requires at least one file in the prefix — write a marker.
+    (prefix/"INSTALLED").write "geno ecosystem #{version}\n"
   end
 
   def caveats
     <<~EOS
       Geno ecosystem installed. Available commands:
+        geno         — unified entry point (geno tt / geno vault / geno surf …)
         geno-tools   — meta package manager for geno skillsets
         tt           — iTerm2 + workspace orchestration
         geno-vault   — registry sync conductor + web GUI + daemon
         surf         — Chromium agent-side orchestration
         pear         — shared watch library
 
-      To start the workspace GUI + daemon:
+      To start the workspace:
         geno-vault serve &   # iTerm2 real-time sync daemon
         geno-vault gui       # opens localhost:8787
 
