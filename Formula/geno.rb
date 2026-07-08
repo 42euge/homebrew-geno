@@ -3,6 +3,7 @@ class Geno < Formula
   homepage "https://github.com/42euge"
   url "https://github.com/42euge/geno-tools/archive/refs/heads/main.tar.gz"
   version "0.1.0"
+  sha256 "c4aae58a93f469925528297d963d5f973c7e1806d8812134f4c10f00806e1e1e"
   license "MIT"
 
   depends_on "pipx"
