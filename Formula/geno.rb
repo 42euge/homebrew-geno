@@ -28,6 +28,16 @@ class Geno < Formula
     system "bash", "-c", "pipx inject geno-vault iterm2 || true"
   end
 
+  def post_install
+    # Register the geno-tt workspace skillset (the `tt` code-org scheme:
+    # ~/code/<track>/<domain>/<workspace>.<born>/<repo>) with all coding agents,
+    # and run its SessionStart bootstrap so the workspace-scheme section is
+    # injected into the global CLAUDE.md. This supersedes the deprecated
+    # color-folder method (geno-ws). Best-effort — never fail the install.
+    system "bash", "-c", "command -v geno-tools >/dev/null && geno-tools install geno-tt || true"
+    system "bash", "-c", "command -v tt >/dev/null && tt --version >/dev/null 2>&1 || true"
+  end
+
   resource "geno-cli" do
     url "https://github.com/42euge/geno-cli/archive/8cd339416cd0d38d6892e6ea599dc36de28bcbbb.tar.gz"
     sha256 "f3c09da919bb67c8fbe8b5a2daae986794d0ec9f7de0017877a9a80ca31d359c"
@@ -44,7 +54,18 @@ class Geno < Formula
         pear         — shared watch library
         geno-specs   — structured execution specs for agents and dev loops
 
-      To start the workspace:
+      Workspaces (the code-org scheme, via `tt`):
+        ~/code/<track>/<domain>/<workspace>.<born>/<repo>
+        tt new-project <track>.<domain>.<workspace>   # create a workspace
+        tt ecosystem-clone <owner> <domain>           # clone a whole org
+        tt inv                                        # list workspaces
+        tt migrate --apply                            # move old color-folder
+                                                      #   workspaces to the scheme
+      The legacy geno-ws color-folder method (~/code-<color>/*-ws) is
+      DEPRECATED — use the commands above. The workspace scheme is documented
+      in ~/.claude/CLAUDE.md (kept current by the geno-tt SessionStart hook).
+
+      To start the workspace daemon:
         geno-vault serve &   # iTerm2 real-time sync daemon
         geno-vault gui       # opens localhost:8787
 
