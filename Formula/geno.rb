@@ -18,7 +18,7 @@ class Geno < Formula
 
     # Install each Python tool into its own pipx venv.
     py = Formula["python@3.12"].opt_bin/"python3.12"
-    %w[geno-tools geno-tt geno-vault geno-surf geno-pear].each do |tool|
+    %w[geno-tools geno-tt geno-vault geno-surf geno-pear geno-specs].each do |tool|
       system "pipx", "install", "git+https://github.com/42euge/#{tool}.git",
              "--force", "--python", py
     end
@@ -42,6 +42,7 @@ class Geno < Formula
         geno-vault   — registry sync conductor + web GUI + daemon
         surf         — Chromium agent-side orchestration
         pear         — shared watch library
+        geno-specs   — structured execution specs for agents and dev loops
 
       To start the workspace:
         geno-vault serve &   # iTerm2 real-time sync daemon
@@ -56,5 +57,6 @@ class Geno < Formula
     system "geno-tools", "--version"
     system "tt", "--version"
     system "geno-vault", "--help"
+    system "geno-specs", "--version"
   end
 end
