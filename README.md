@@ -18,6 +18,7 @@ brew install geno
 | `geno-vault` | geno-vault | Registry sync, web GUI, iTerm2 daemon |
 | `surf` | geno-surf | Chromium agent-side tab group control |
 | `pear` | geno-pear | Shared mtime-watch library |
+| `geno-specs` | geno-specs | Structured execution specs for agents and dev loops |
 
 ## Quick start
 
