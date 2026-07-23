@@ -1,9 +1,9 @@
 class Geno < Formula
   desc "Geno ecosystem — agentic workspace orchestration"
   homepage "https://github.com/42euge"
-  url "https://github.com/42euge/geno-tools/archive/refs/heads/main.tar.gz"
+  url "https://github.com/42euge/geno-tools/archive/92756abb1d9422ca44c776e889a31038777a92c9.tar.gz"
   version "0.1.0"
-  sha256 "0096bb404eb682f5b8a0e1496d11f7309c3623372684a3b5a4e7bf74923b4fa1"
+  sha256 "624203ad3167d2938566ae02f29a6c228f3865f2c3a3d7593fac6cf6419e636f"
   license "MIT"
 
   depends_on "go" => :build
@@ -29,8 +29,8 @@ class Geno < Formula
   end
 
   resource "geno-cli" do
-    url "https://github.com/42euge/geno-cli/archive/refs/heads/main.tar.gz"
-    sha256 "d10c8032db380ac0d279267c5aba15bc50b3bfbef54cd25510e7575396648613"
+    url "https://github.com/42euge/geno-cli/archive/8cd339416cd0d38d6892e6ea599dc36de28bcbbb.tar.gz"
+    sha256 "f3c09da919bb67c8fbe8b5a2daae986794d0ec9f7de0017877a9a80ca31d359c"
   end
 
   def caveats
