@@ -1,33 +1,30 @@
 # homebrew-geno
 
-Homebrew tap for the [geno ecosystem](https://github.com/42euge) — agentic workspace orchestration.
+Homebrew tap for [geno-tools](https://github.com/42euge/geno-tools), the skillset manager for coding agents.
 
 ## Install
 
 ```bash
 brew tap 42euge/geno
-brew install geno
+brew install geno-tools
 ```
 
 ## What gets installed
 
 | Command | Repo | Purpose |
 |---|---|---|
-| `geno-tools` | geno-tools | Meta package manager for geno skillsets |
-| `tt` | geno-tt | iTerm2 + workspace orchestration |
-| `geno-vault` | geno-vault | Registry sync, web GUI, iTerm2 daemon |
-| `surf` | geno-surf | Chromium agent-side tab group control |
-| `pear` | geno-pear | Shared mtime-watch library |
-| `geno-specs` | geno-specs | Structured execution specs for agents and dev loops |
+| `geno-tools` | [geno-tools](https://github.com/42euge/geno-tools) | Install, update, inspect, and audit agent skillsets |
+
+The rest of the geno ecosystem is packaged separately and is not installed by
+this formula.
 
 ## Quick start
 
 ```bash
-# Start the daemon (keeps iTerm tabs in sync with the registry)
-geno-vault serve &
-
-# Open the workspace GUI at localhost:8787
-geno-vault gui
+geno-tools discover
+geno-tools install <skillset>
+geno-tools status
 ```
 
-Requires iTerm2 with **Settings ▸ General ▸ Magic ▸ Enable Python API** turned on.
+Use `geno-tools system uninstall` before `brew uninstall geno-tools` to remove
+geno-tools-managed registrations while preserving user data under `~/.geno`.
