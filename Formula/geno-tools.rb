@@ -29,6 +29,7 @@ class GenoTools < Formula
 
   head "https://github.com/42euge/geno-tools.git", branch: "main"
 
+  depends_on "expat"
   depends_on "libyaml"
   depends_on "node"
   depends_on "python@3.12"
@@ -68,6 +69,24 @@ class GenoTools < Formula
     # resources make installation reproducible and avoid resolving packages
     # from PyPI while Homebrew is building the formula.
     ENV["PIP_NO_INDEX"] = "1"
+
+    # Work around a broken Python 3.12 <-> macOS pairing that affects any
+    # user whose system libexpat.dylib predates the expat ABI the Homebrew
+    # python@3.12 bottle was linked against (seen on macOS 26 "Tahoe" point
+    # releases): dlopen fails on pyexpat with
+    #   Symbol not found: _XML_SetAllocTrackerActivationThreshold
+    # pyexpat backs plistlib, which platform.mac_ver() uses on macOS, so the
+    # failure is swallowed and mac_ver() silently returns all-empty values.
+    # pip's dependency resolver (and, if network installs are ever allowed
+    # here, its default truststore-backed SSL context) both parse that
+    # version string with `tuple(map(int, ...))` and crash with
+    #   ValueError: invalid literal for int() with base 10: ''
+    # before any of our own install steps run. Point dyld at our own expat
+    # keg, which has the missing symbol, so pyexpat/plistlib/mac_ver all
+    # work as normal for the duration of this install.
+    ENV.prepend_path "DYLD_LIBRARY_PATH", formula_opt_lib("expat")
+    ENV["PIP_USE_DEPRECATED"] = "legacy-certs"
+
     venv = virtualenv_create(libexec, "python3.12")
     venv.pip_install resource("setuptools")
     venv.pip_install resource("pyyaml"), build_isolation: false
